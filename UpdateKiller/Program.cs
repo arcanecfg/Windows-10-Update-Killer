@@ -14,7 +14,7 @@ namespace UpdateKiller
         static void Main(string[] args)
         {
             Console.Write("Enter monitoring delay: ");
-            int delayVal = Console.Read();
+            int delayVal = Convert.ToInt32(Console.ReadLine());
 
             if (IsAdministrator() == false)
             {
