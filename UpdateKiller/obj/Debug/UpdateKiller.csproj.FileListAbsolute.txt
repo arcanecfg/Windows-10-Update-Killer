@@ -1,0 +1,6 @@
+C:\Code\C#\UpdateKiller\UpdateKiller\bin\Debug\UpdateKiller.exe.config
+C:\Code\C#\UpdateKiller\UpdateKiller\bin\Debug\UpdateKiller.exe
+C:\Code\C#\UpdateKiller\UpdateKiller\bin\Debug\UpdateKiller.pdb
+C:\Code\C#\UpdateKiller\UpdateKiller\obj\Debug\UpdateKiller.csprojResolveAssemblyReference.cache
+C:\Code\C#\UpdateKiller\UpdateKiller\obj\Debug\UpdateKiller.exe
+C:\Code\C#\UpdateKiller\UpdateKiller\obj\Debug\UpdateKiller.pdb
