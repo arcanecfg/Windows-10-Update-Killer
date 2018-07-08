@@ -47,9 +47,10 @@ namespace UpdateKiller
                 {
                     foreach (var service in SvcList)
                     {
-                        var sc = new ServiceController(service);
-
-                        if (sc.Status != ServiceControllerStatus.Running) continue;
+                        using (var sc = new ServiceController(service))
+                        {
+                            if (sc.Status != ServiceControllerStatus.Running) continue;
+                        }
 
                         StopService(service, 2000);
                         Console.WriteLine($"Service: \"{service}\" was stopped.");
@@ -60,19 +61,21 @@ namespace UpdateKiller
                     Console.WriteLine($"Exception: {ex.Message}");
                 }
 
+                GC.Collect();
                 await Task.Delay(delay);
             }
         }
 
         private static void StopService(string serviceName, int timeoutMilliseconds)
         {
-            var service = new ServiceController(serviceName);
             try
             {
                 var timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
-
-                service.Stop();
-                service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                using (var sc = new ServiceController(serviceName))
+                {
+                    sc.Stop();
+                    sc.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                }
             }
             catch (Exception ex)
             {
