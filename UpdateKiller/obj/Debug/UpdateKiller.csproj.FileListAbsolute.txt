@@ -10,3 +10,9 @@ C:\Code\C#\UpdateKiller\Windows-10-Update-Killer\UpdateKiller\obj\Debug\UpdateKi
 C:\Code\C#\UpdateKiller\Windows-10-Update-Killer\UpdateKiller\bin\Debug\UpdateKiller.exe
 C:\Code\C#\UpdateKiller\Windows-10-Update-Killer\UpdateKiller\bin\Debug\UpdateKiller.pdb
 C:\Code\C#\UpdateKiller\Windows-10-Update-Killer\UpdateKiller\obj\Debug\UpdateKiller.csprojResolveAssemblyReference.cache
+C:\Users\Wardog\Documents\GitHub\Windows-10-Update-Killer\UpdateKiller\bin\Debug\UpdateKiller.exe
+C:\Users\Wardog\Documents\GitHub\Windows-10-Update-Killer\UpdateKiller\bin\Debug\UpdateKiller.pdb
+C:\Users\Wardog\Documents\GitHub\Windows-10-Update-Killer\UpdateKiller\obj\Debug\UpdateKiller.csprojAssemblyReference.cache
+C:\Users\Wardog\Documents\GitHub\Windows-10-Update-Killer\UpdateKiller\obj\Debug\UpdateKiller.csproj.CoreCompileInputs.cache
+C:\Users\Wardog\Documents\GitHub\Windows-10-Update-Killer\UpdateKiller\obj\Debug\UpdateKiller.exe
+C:\Users\Wardog\Documents\GitHub\Windows-10-Update-Killer\UpdateKiller\obj\Debug\UpdateKiller.pdb
