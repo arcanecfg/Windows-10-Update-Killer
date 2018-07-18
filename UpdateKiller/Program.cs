@@ -1,59 +1,86 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ServiceProcess;
 using System.Security.Principal;
+using System.ServiceProcess;
+using System.Threading.Tasks;
 
 namespace UpdateKiller
 {
-    class Program
+    public class Program
     {
-        static List<string> svcList = new List<string>(new string[] {"wuauserv","usoSvc","bits"});
-        static void Main(string[] args)
-        {
-            Console.Write("Enter monitoring delay: ");
-            int delayVal = Convert.ToInt32(Console.ReadLine());
+        private static readonly string[] SvcList = {"wuauserv", "usoSvc", "bits"};
 
-            if (IsAdministrator() == false)
+        public static bool IsAdministrator =>
+            new WindowsPrincipal(WindowsIdentity.GetCurrent())
+                .IsInRole(WindowsBuiltInRole.Administrator);
+
+        public static void Main() => RunIndefiniteTask().Wait();
+
+        private static async Task RunIndefiniteTask()
+        {
+            Console.Title = "Update Killer";
+
+            if (!IsAdministrator)
             {
                 Console.WriteLine("Update Killer needs to be run as administrator.");
-                Console.ReadKey();
-                Environment.Exit(1);
+                await Task.Delay(-1);
             }
-            else
+
+            Console.Write("Enter monitoring delay: ");
+            var userInput = Console.ReadLine();
+            var isNumeric = int.TryParse(userInput, out var n);
+
+            if (!isNumeric)
             {
-                Console.WriteLine("Update Killer is running as administrator and monitoring update services.");
+                Console.Clear();
+                Console.WriteLine("Please enter a numeric value.");
+                await Task.Delay(2000);
+                RunIndefiniteTask().Wait();
             }
+
+            var delay = Convert.ToInt32(n);
+            Console.Title += $" | Delay: {delay}";
+            Console.Clear();
 
             while (true)
             {
                 try
                 {
-                    foreach (string svcName in svcList)
+                    foreach (var service in SvcList)
                     {
-                        ServiceController sc = new ServiceController(svcName);
-                        if (sc.Status == ServiceControllerStatus.Running)
+                        using (var sc = new ServiceController(service))
                         {
-                            System.Diagnostics.Process.Start("CMD.exe", "/C net stop " + svcName);
-                            Console.WriteLine("Service " + svcName + " was found and killed.");
+                            if (sc.Status != ServiceControllerStatus.Running) continue;
                         }
+
+                        StopService(service, 2000);
+                        Console.WriteLine($"Service: \"{service}\" was stopped.");
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Console.WriteLine("An error occured.");
+                    Console.WriteLine($"Exception: {ex.Message}");
                 }
-                System.Threading.Thread.Sleep(delayVal);
+
+                GC.Collect();
+                await Task.Delay(delay);
             }
-            
         }
 
-        public static bool IsAdministrator()
+        private static void StopService(string serviceName, int timeoutMilliseconds)
         {
-            return (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
-                      .IsInRole(WindowsBuiltInRole.Administrator);
+            try
+            {
+                var timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+                using (var sc = new ServiceController(serviceName))
+                {
+                    sc.Stop();
+                    sc.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
         }
     }
 }
